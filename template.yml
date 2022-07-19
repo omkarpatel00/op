@@ -1,0 +1,20 @@
+---
+- name: transfer the script 1
+  copy: 
+    src: /etc/ansible/scripts/os-template-build.sh
+    dest: /tmp/os-template-build.sh 
+    mode: 0700
+    force: yes
+
+- name: transfer the script 2
+  copy: 
+    src: /etc/ansible/scripts/1-all-nodes-pdns-setup.sh
+    dest: /tmp/1-all-nodes-pdns-setup.sh 
+    mode: 0700
+    force: yes
+
+- name: execute the script 1
+  command: sh /tmp/os-template-build.sh
+
+- name: execute the script 2
+  command: sh /tmp/1-all-nodes-pdns-setup.sh

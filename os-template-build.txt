@@ -1,0 +1,59 @@
+PDNS Templete:
+
+yum install epel-release yum-utils yum-plugin-priorities -y
+
+curl -o /etc/yum.repos.d/powerdns-auth-46.repo https://repo.powerdns.com/repo-files/el-auth-46.repo 
+curl -o /etc/yum.repos.d/powerdns-rec-47.repo https://repo.powerdns.com/repo-files/el-rec-47.repo
+
+yum install pdns pdns-recursor pdns-tools.x86_64 pdns-backend-sqlite.x86_64 httpd bind-utils -y 
+
+
+
+sudo yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+
+yum-config-manager --enable remi-php74
+
+yum  -y install httpd php php-devel php-gd php-imap php-ldap php-mysql php-odbc php-pear php-xml php-xmlrpc php-mbstring php-mcrypt php-mhash gettext php-intl
+
+systemctl restart httpd
+systemctl enable httpd
+
+cd /var/www/html
+touch /var/www/html/index.html
+wget https://codeload.github.com/poweradmin/poweradmin/tar.gz/refs/tags/v2.2.2 -O poweradmin.tar.gz
+
+tar -zxvf poweradmin.tar.gz
+mv poweradmin-2.2.2/ poweradmin
+rm -rf poweradmin.tar.gz
+
+mkdir /var/pdns/
+touch /var/pdns/pdns.sqlite3
+cd /var/
+chown pdns:apache /var/pdns/
+chmod 775 /var/pdns/
+cd pdns/
+chown pdns:apache /var/pdns/pdns.sqlite3
+chmod 660 /var/pdns/pdns.sqlite3
+
+
+ /var/www/html/poweradmin/inc/config.inc.php
+ 
+ <?php
+$db_file = '/var/pdns/pdns.sqlite3';
+$db_user = '';
+$db_pass = '';
+$db_type = 'sqlite';
+
+$session_key = 'd-D14QGWM04BiOy0Dh%nLm2FqFKuu4UvHtxrjgDCfnPbpR';
+
+$iface_lang = 'en_EN';
+
+$dns_hostmaster = 'ns1';
+$dns_ns1 = 'ns1';
+$dns_ns2 = 'ns2';
+
+====================================
+
+rm -rf /var/www/html/poweradmin/install/
+
+
